@@ -23,7 +23,7 @@
         "gradleCommand": ":app:assembleRelease",
         "withoutCredentials": false,
         "env": {
-          "GRADLE_OPTS": "-Xmx2048m -XX:MaxPermSize=512m"
+          "GRADLE_OPTS": "-Xmx2048m -XX:MaxMetaspaceSize=512m"
         }
       }
     },
@@ -33,7 +33,7 @@
         "buildType": "apk",
         "gradleCommand": ":app:assembleRelease",
         "env": {
-          "GRADLE_OPTS": "-Xmx2048m -XX:MaxPermSize=512m"
+          "GRADLE_OPTS": "-Xmx2048m -XX:MaxMetaspaceSize=512m"
         }
       }
     }
