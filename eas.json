@@ -9,7 +9,7 @@
       "distribution": "internal",
       "android": {
         "buildType": "apk",
-        "gradleCommand": ":app:assembleRelease",
+        "gradleCommand": ":app:assembleDebug",
         "withoutCredentials": false,
         "env": {
           "GRADLE_OPTS": "-Xmx2048m -XX:MaxMetaspaceSize=512m"
