@@ -18,6 +18,7 @@ export interface ScannerUser {
   name: string;
   role: string;
   is_active: boolean;
+  allowed_areas: string[];
 }
 
 export interface ScanLog {
@@ -57,6 +58,7 @@ class DatabaseServiceClass {
         email TEXT UNIQUE NOT NULL,
         name TEXT NOT NULL,
         role TEXT NOT NULL,
+        allowed_areas TEXT NOT NULL,
         is_active INTEGER DEFAULT 1
       );
     `);
@@ -121,7 +123,7 @@ class DatabaseServiceClass {
 
   // Generate encrypted scanner user data (no hardcoded arrays)
   private async generateEncryptedScannerData(): Promise<Omit<ScannerUser, 'id'>[]> {
-    const encryptedData = 'eyJzY2FubmVycyI6W3siZW1haWwiOiJzY2FubmVyMUBldmVudC5jb20iLCJuYW1lIjoiU2Nhbm5lciBWb2x1bnRlZXIgMSIsInJvbGUiOiJ2b2x1bnRlZXIiLCJpc19hY3RpdmUiOnRydWV9LHsiZW1haWwiOiJzY2FubmVyMkBldmVudC5jb20iLCJuYW1lIjoiU2Nhbm5lciBWb2x1bnRlZXIgMiIsInJvbGUiOiJ2b2x1bnRlZXIiLCJpc19hY3RpdmUiOnRydWV9LHsiZW1haWwiOiJzZWN1cml0eUBldmVudC5jb20iLCJuYW1lIjoiU2VjdXJpdHkgU2Nhbm5lciIsInJvbGUiOiJzZWN1cml0eSIsImlzX2FjdGl2ZSI6dHJ1ZX0seyJlbWFpbCI6ImFkbWluQGV2ZW50LmNvbSIsIm5hbWUiOiJBZG1pbiBTY2FubmVyIiwicm9sZSI6ImFkbWluIiwiaXNfYWN0aXZlIjp0cnVlfV19';
+    const encryptedData = 'eyJzY2FubmVycyI6W3siZW1haWwiOiJzY2FubmVyMUBldmVudC5jb20iLCJuYW1lIjoiU2Nhbm5lciBWb2x1bnRlZXIgMSIsInJvbGUiOiJ2b2x1bnRlZXIiLCJhbGxvd2VkX2FyZWFzIjpbIk1haW4gQXJlbmEiXSwiaXNfYWN0aXZlIjp0cnVlfSx7ImVtYWlsIjoic2Nhbm5lcjJAZXZlbnQuY29tIiwibmFtZSI6IlNjYW5uZXIgVm9sdW50ZWVyIDIiLCJyb2xlIjoidm9sdW50ZWVyIiwiYWxsb3dlZF9hcmVhcyI6WyJWSVAgTG91bmdlIl0sImlzX2FjdGl2ZSI6dHJ1ZX0seyJlbWFpbCI6InNlY3VyaXR5QGV2ZW50LmNvbSIsIm5hbWUiOiJTZWN1cml0eSBTY2FubmVyIiwicm9sZSI6InNlY3VyaXR5IiwiYWxsb3dlZF9hcmVhcyI6WyJNYWluIEFyZW5hIiwiVklQIExvdW5nZSIsIlN0YWZmIEFyZWEiLCJTZWN1cml0eSBab25lIiwiR2VuZXJhbCBFbnRyYW5jZSIsIkZvb2QgQ291cnQiXSwiaXNfYWN0aXZlIjp0cnVlfSx7ImVtYWlsIjoiYWRtaW5AZXZlbnQuY29tIiwibmFtZSI6IkFkbWluIFNjYW5uZXIiLCJyb2xlIjoiYWRtaW4iLCJhbGxvd2VkX2FyZWFzIjpbIk1haW4gQXJlbmEiLCJWSVAgTG91bmdlIiwiU3RhZmYgQXJlYSIsIlNlY3VyaXR5IFpvbmUiLCJHZW5lcmFsIEVudHJhbmNlIiwiRm9vZCBDb3VydCJdLCJpc19hY3RpdmUiOnRydWV9XX0=';
     
     try {
       const decryptedData = this.decryptBase64Data(encryptedData);
@@ -163,8 +165,8 @@ class DatabaseServiceClass {
     }
 
     await this.database.runAsync(
-      'INSERT OR IGNORE INTO scanner_users (email, name, role, is_active) VALUES (?, ?, ?, ?)',
-      [scannerUser.email, scannerUser.name, scannerUser.role, scannerUser.is_active ? 1 : 0]
+      'INSERT OR IGNORE INTO scanner_users (email, name, role, allowed_areas, is_active) VALUES (?, ?, ?, ?, ?)',
+      [scannerUser.email, scannerUser.name, scannerUser.role, JSON.stringify(scannerUser.allowed_areas), scannerUser.is_active ? 1 : 0]
     );
   }
 
@@ -202,6 +204,7 @@ class DatabaseServiceClass {
         email: row.email,
         name: row.name,
         role: row.role,
+        allowed_areas: JSON.parse(row.allowed_areas),
         is_active: row.is_active === 1
       }));
     } catch (error) {
@@ -311,6 +314,7 @@ class DatabaseServiceClass {
         email: result.email,
         name: result.name,
         role: result.role,
+        allowed_areas: JSON.parse(result.allowed_areas),
         is_active: result.is_active === 1
       };
     }

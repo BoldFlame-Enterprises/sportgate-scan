@@ -185,13 +185,10 @@ export default function LoginScreen() {
               1. Login with your scanner account
             </Text>
             <Text style={styles.infoText}>
-              2. Select the area you&apos;re scanning for
+              2. Point camera at QR codes to verify access
             </Text>
             <Text style={styles.infoText}>
-              3. Point camera at QR codes to verify access
-            </Text>
-            <Text style={styles.infoText}>
-              4. Green = Access granted, Red = Access denied
+              3. Green = Access granted, Red = Access denied
             </Text>
           </View>
 

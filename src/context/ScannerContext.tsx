@@ -4,8 +4,6 @@ import { ScannerUser } from '@/services/DatabaseService';
 interface ScannerContextType {
   scannerUser: ScannerUser | null;
   setScannerUser: (user: ScannerUser | null) => void;
-  selectedArea: string;
-  setSelectedArea: (area: string) => void;
   isScanning: boolean;
   setIsScanning: (scanning: boolean) => void;
   scanCount: number;
@@ -29,7 +27,6 @@ interface ScannerProviderProps {
 
 export const ScannerProvider: React.FC<ScannerProviderProps> = ({ children }) => {
   const [scannerUser, setScannerUser] = useState<ScannerUser | null>(null);
-  const [selectedArea, setSelectedArea] = useState<string>('Main Arena');
   const [isScanning, setIsScanning] = useState<boolean>(true);
   const [scanCount, setScanCount] = useState<number>(0);
   const [lastScanResult, setLastScanResult] = useState<ScanResult | null>(null);
@@ -39,8 +36,6 @@ export const ScannerProvider: React.FC<ScannerProviderProps> = ({ children }) =>
       value={{ 
         scannerUser, 
         setScannerUser, 
-        selectedArea, 
-        setSelectedArea,
         isScanning,
         setIsScanning,
         scanCount,

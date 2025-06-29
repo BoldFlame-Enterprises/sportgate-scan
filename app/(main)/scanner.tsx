@@ -8,7 +8,6 @@ import {
   ScrollView,
   Dimensions,
 } from 'react-native';
-import { Picker } from '@react-native-picker/picker';
 import { CameraView, useCameraPermissions } from 'expo-camera';
 import { router } from 'expo-router';
 import { useScanner } from '../../src/context/ScannerContext';
@@ -17,26 +16,31 @@ import { DatabaseService } from '../../src/services/DatabaseService';
 const { width } = Dimensions.get('window');
 
 export default function ScannerScreen() {
-  const { scannerUser, selectedArea, setSelectedArea, lastScanResult, setLastScanResult } = useScanner();
+  const { scannerUser, lastScanResult, setLastScanResult } = useScanner();
   const [isScanning, setIsScanning] = useState(true);
   const [scanCount, setScanCount] = useState(0);
   const [permission, requestPermission] = useCameraPermissions();
-  const areas = DatabaseService.getAvailableAreas();
 
   const handleQRCodeScanned = useCallback(async ({ data }: { data: string }) => {
     if (!isScanning || !scannerUser) return;
+
+    const scanArea = scannerUser.allowed_areas[0];
+    if (!scanArea) {
+      Alert.alert('Error', 'No scanning area assigned to your account.');
+      return;
+    }
     
     setIsScanning(false);
     
     try {
-      const verification = await DatabaseService.verifyQRCode(data, selectedArea);
+      const verification = await DatabaseService.verifyQRCode(data, scanArea);
       
       // Log the scan attempt
       if (verification.user) {
         await DatabaseService.logScan({
           user_id: verification.user.id,
           user_name: verification.user.name,
-          area: selectedArea,
+          area: scanArea,
           access_granted: verification.success,
           failure_reason: verification.success ? undefined : verification.reason,
           scanned_at: new Date().toISOString(),
@@ -74,7 +78,7 @@ export default function ScannerScreen() {
         setIsScanning(true);
       }, 2000);
     }
-  }, [isScanning, scannerUser, selectedArea, setLastScanResult, setScanCount]);
+  }, [isScanning, scannerUser, setLastScanResult, setScanCount]);
 
   const handleLogout = () => {
     Alert.alert(
@@ -192,18 +196,7 @@ export default function ScannerScreen() {
           {/* Area Selection */}
           <View style={styles.areaCard}>
             <Text style={styles.areaLabel}>Scanning Area:</Text>
-            <View style={styles.pickerContainer}>
-              <Picker
-                selectedValue={selectedArea}
-                onValueChange={setSelectedArea}
-                style={styles.picker}
-                mode="dropdown"
-              >
-                {areas.map((area) => (
-                  <Picker.Item key={area} label={area} value={area} />
-                ))}
-              </Picker>
-            </View>
+            <Text style={styles.areaValue}>{scannerUser?.allowed_areas[0] || 'N/A'}</Text>
           </View>
 
           {/* Action Buttons */}
@@ -372,6 +365,11 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: '#374151',
     marginBottom: 8,
+  },
+  areaValue: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#059669',
   },
   pickerContainer: {
     borderWidth: 1,

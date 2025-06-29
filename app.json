@@ -3,6 +3,7 @@
     "name": "SportGate Scan",
     "slug": "sportgate-scan",
     "version": "1.0.0",
+    "owner": "boldflame-enterprises",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "sportgate-scan",
