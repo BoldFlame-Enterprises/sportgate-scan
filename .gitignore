@@ -111,17 +111,8 @@ dump.rdb
 .metro-health-check*
 
 # React Native build outputs
-**/android/build/
-**/android/.gradle/
-**/android/app/build/
-**/android/local.properties
-**/android/gradle/
-**/ios/build/
-**/ios/Pods/
-**/ios/*.xcworkspace
-**/ios/*.xcuserdata
-**/ios/Podfile.lock
-
+android
+ios
 # React Native bundle artifacts
 *.jsbundle
 
@@ -171,6 +162,7 @@ ios/Pods/MMKV
 # Package managers - use workspace management
 package-lock.json
 yarn.lock
+pnpm-lock.yaml
 **/package-lock.json
 **/yarn.lock
 
