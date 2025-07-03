@@ -37,7 +37,7 @@ class DatabaseServiceClass {
 
   async initDatabase(): Promise<void> {
     try {
-      this.database = await SQLite.openDatabaseAsync('sportgate_scan.db');
+      this.database = await SQLite.openDatabaseAsync('verigate_scan.db');
       await this.createTables();
       await this.createAndStoreEncryptedSeedData();
     } catch (error) {
@@ -282,8 +282,8 @@ class DatabaseServiceClass {
       });
 
       return {
-        totalScanners: scannerCountResult?.count || 0,
-        totalUsers: userCountResult?.count || 0,
+        totalScanners: scannerCountResult?.count ?? 0,
+        totalUsers: userCountResult?.count ?? 0,
         usersByAccessLevel,
         scannersByRole
       };
@@ -359,7 +359,7 @@ class DatabaseServiceClass {
         scanLog.user_name,
         scanLog.area,
         scanLog.access_granted ? 1 : 0,
-        scanLog.failure_reason || null,
+        scanLog.failure_reason ?? null,
         scanLog.scanned_at,
         scanLog.scanner_user
       ]
@@ -388,10 +388,10 @@ class DatabaseServiceClass {
     }));
   }
 
-  // QR code verification with the same encryption as SportGatePass
+  // QR code verification with the same encryption as VeriGatePass
   async verifyQRCode(qrData: string, area: string): Promise<{ success: boolean; user?: User; reason?: string }> {
     try {
-      // First, try to verify if it's a secure QR code (new format from SportGate Pass)
+      // First, try to verify if it's a secure QR code (new format from VeriGate Pass)
       const secureVerification = await this.verifySecureQRCode(qrData);
       
       if (secureVerification.valid && secureVerification.payload) {

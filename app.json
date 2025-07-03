@@ -1,12 +1,12 @@
 {
   "expo": {
-    "name": "SportGate Scan",
-    "slug": "sportgate-scan",
+    "name": "VeriGate Scan",
+    "slug": "verigate-scan",
     "version": "1.0.0",
     "owner": "boldflame-enterprises",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "sportgate-scan",
+    "scheme": "verigate-scan",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "splash": {
@@ -19,9 +19,9 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.sportgate.scan",
+      "bundleIdentifier": "com.verigate.scan",
       "infoPlist": {
-        "NSCameraUsageDescription": "SportGate Scan needs camera access to scan QR codes for access control verification."
+        "NSCameraUsageDescription": "VeriGate Scan needs camera access to scan QR codes for access control verification."
       }
     },
     "android": {
@@ -29,7 +29,7 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#059669"
       },
-      "package": "com.sportgate.scan",
+      "package": "com.verigate.scan",
       "permissions": [
         "android.permission.CAMERA",
         "android.permission.INTERNET",
@@ -48,7 +48,7 @@
       [
         "expo-camera",
         {
-          "cameraPermission": "SportGate Scan needs camera access to scan QR codes for access control verification."
+          "cameraPermission": "VeriGate Scan needs camera access to scan QR codes for access control verification."
         }
       ]
     ],
